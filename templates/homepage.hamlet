@@ -1,5 +1,7 @@
 <div id="my_dataviz">
+<button class="randomize"> randomize
 <div id="piechart">
+
 
 $# <div .masthead>
 $#     <div .container>
