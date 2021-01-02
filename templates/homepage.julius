@@ -1,39 +1,95 @@
+// HISTOGRAM - FROM https://www.d3-graph-gallery.com/graph/histogram_basic.html
+
+ // set the dimensions and margins of the graph
+ var margin = {top: 10, right: 30, bottom: 30, left: 40},
+     hist_width = 460 - margin.left - margin.right,
+     hist_height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3v4.select("#my_dataviz")
+   .append("svg")
+     .attr("width", hist_width + margin.left + margin.right)
+     .attr("height", hist_height + margin.top + margin.bottom)
+   .append("g")
+     .attr("transform",
+           "translate(" + margin.left + "," + margin.top + ")");
+
+ // get the data
+ d3v4.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv", function(data) {
+
+   // X axis: scale and draw:
+   var x = d3v4.scaleLinear()
+       .domain([0, 1000])     // can use this instead of 1000 to have the max of data: d3v4.max(data, function(d) { return +d.price })
+       .range([0, hist_width]);
+   svg.append("g")
+       .attr("transform", "translate(0," + hist_height + ")")
+       .call(d3v4.axisBottom(x));
+
+//   // set the parameters for the histogram
+   var histogram = d3v4.histogram()
+       .value(function(d) { return d.price; })   // I need to give the vector of value
+       .domain(x.domain())  // then the domain of the graphic
+       .thresholds(x.ticks(70)); // then the numbers of bins
+
+   // And apply this function to data to get the bins
+   var bins = histogram(data);
+
+   // Y axis: scale and draw:
+   var y = d3v4.scaleLinear()
+       .range([hist_height, 0]);
+       y.domain([0, d3v4.max(bins, function(d) { return d.length; })]);   // d3v4.hist has to be called before the Y axis obviously
+   svg.append("g")
+       .call(d3v4.axisLeft(y));
+
+//   // append the bar rectangles to the svg element
+   svg.selectAll("rect")
+       .data(bins)
+       .enter()
+       .append("rect")
+         .attr("x", 1)
+         .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+         .attr("width", function(d) { return x(d.x1) - x(d.x0) -1 ; })
+         .attr("height", function(d) { return hist_height - y(d.length); })
+         .style("fill", "#69b3a2")
+
+ });
+
 // PIE CHART - FROM http://bl.ocks.org/dbuezas/9306799
-console.log("HELLO OUT THERE!!!!")
-var svg = d3.select("#piechart")
+
+var svgPie = d3v3.select("#piechart")
 	.append("svg")
 	.append("g")
 
-svg.append("g")
+svgPie.append("g")
 	.attr("class", "slices");
-svg.append("g")
+svgPie.append("g")
 	.attr("class", "labels");
-svg.append("g")
+svgPie.append("g")
 	.attr("class", "lines");
 
-var width = 960,
-    height = 450,
-	radius = Math.min(width, height) / 2;
+var pie_width = 960,
+    pie_height = 450,
+	pie_radius = Math.min(pie_width, pie_height) / 2;
 
-var pie = d3.layout.pie()
+var pie = d3v3.layout.pie()
 	.sort(null)
 	.value(function(d) {
 		return d.value;
 	});
 
-var arc = d3.svg.arc()
-	.outerRadius(radius * 0.8)
-	.innerRadius(radius * 0.4);
+var arc = d3v3.svg.arc()
+	.outerRadius(pie_radius * 0.8)
+	.innerRadius(pie_radius * 0.4);
 
-var outerArc = d3.svg.arc()
-	.innerRadius(radius * 0.9)
-	.outerRadius(radius * 0.9);
+var outerArc = d3v3.svg.arc()
+	.innerRadius(pie_radius * 0.9)
+	.outerRadius(pie_radius * 0.9);
 
-svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+svgPie.attr("transform", "translate(" + pie_width / 2 + "," + pie_height / 2 + ")");
 
 var key = function(d){ return d.data.label; };
 
-var color = d3.scale.ordinal()
+var color = d3v3.scale.ordinal()
 	.domain(["Lorem ipsum", "dolor sit", "amet", "consectetur", "adipisicing", "elit", "sed", "do", "eiusmod", "tempor", "incididunt"])
 	.range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
@@ -46,7 +102,7 @@ function randomData (){
 
 change(randomData());
 
-d3.select(".randomize")
+d3v3.select(".randomize")
 	.on("click", function(){
 		change(randomData());
 	});
@@ -55,7 +111,7 @@ d3.select(".randomize")
 function change(data) {
 
 	/* //////- PIE SLICES //////-*/
-	var slice = svg.select(".slices").selectAll("path.slice")
+	var slice = svgPie.select(".slices").selectAll("path.slice")
 		.data(pie(data), key);
 
 	slice.enter()
@@ -67,7 +123,7 @@ function change(data) {
 		.transition().duration(1000)
 		.attrTween("d", function(d) {
 			this._current = this._current || d;
-			var interpolate = d3.interpolate(this._current, d);
+			var interpolate = d3v3.interpolate(this._current, d);
 			this._current = interpolate(0);
 			return function(t) {
 				return arc(interpolate(t));
@@ -79,7 +135,7 @@ function change(data) {
 
 	/* //////- TEXT LABELS //////-*/
 
-	var text = svg.select(".labels").selectAll("text")
+	var text = svgPie.select(".labels").selectAll("text")
 		.data(pie(data), key);
 
 	text.enter()
@@ -96,18 +152,18 @@ function change(data) {
 	text.transition().duration(1000)
 		.attrTween("transform", function(d) {
 			this._current = this._current || d;
-			var interpolate = d3.interpolate(this._current, d);
+			var interpolate = d3v3.interpolate(this._current, d);
 			this._current = interpolate(0);
 			return function(t) {
 				var d2 = interpolate(t);
 				var pos = outerArc.centroid(d2);
-				pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+				pos[0] = pie_radius * (midAngle(d2) < Math.PI ? 1 : -1);
 				return "translate("+ pos +")";
 			};
 		})
 		.styleTween("text-anchor", function(d){
 			this._current = this._current || d;
-			var interpolate = d3.interpolate(this._current, d);
+			var interpolate = d3v3.interpolate(this._current, d);
 			this._current = interpolate(0);
 			return function(t) {
 				var d2 = interpolate(t);
@@ -120,7 +176,7 @@ function change(data) {
 
 	/* //////- SLICE TO TEXT POLYLINES //////-*/
 
-	var polyline = svg.select(".lines").selectAll("polyline")
+	var polyline = svgPie.select(".lines").selectAll("polyline")
 		.data(pie(data), key);
 	
 	polyline.enter()
@@ -129,12 +185,12 @@ function change(data) {
 	polyline.transition().duration(1000)
 		.attrTween("points", function(d){
 			this._current = this._current || d;
-			var interpolate = d3.interpolate(this._current, d);
+			var interpolate = d3v3.interpolate(this._current, d);
 			this._current = interpolate(0);
 			return function(t) {
 				var d2 = interpolate(t);
 				var pos = outerArc.centroid(d2);
-				pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+				pos[0] = pie_radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
 				return [arc.centroid(d2), outerArc.centroid(d2), pos];
 			};			
 		});

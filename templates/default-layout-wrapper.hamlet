@@ -23,9 +23,13 @@ $newline never
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js">
     
-    $# <script src="https://d3js.org/d3.v4.js"></script>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
-    
+    <script src="https://d3js.org/d3.v4.js">
+    <script>
+      d3v4 = window.d3;
+      window.d3 = null;
+    <script src=https://d3js.org/d3.v3.min.js">
+    <script>
+      d3v3 = window.d3;
     
     \<!-- Bootstrap-3.3.7 compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
