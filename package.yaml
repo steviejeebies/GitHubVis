@@ -44,6 +44,7 @@ dependencies:
 - http-client
 - utf8-string
 - dotenv
+- random
 
 # The library contains all of our application code. The executable
 # defined below is just a thin wrapper.

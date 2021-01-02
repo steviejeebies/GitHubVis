@@ -16,6 +16,13 @@ var hist_svg = d3v4.select("#histogram_div")
 
     var data = [{price:10}, {price:10}, {price:20}, {price:20}, {price:20}, {price:30}, {price:23}, {price:40}, {price:40}, {price:40}]
 
+ d3v4.json("/userdata", function (error,data) {
+    console.log("Hello!")
+    console.log(data)
+    console.log(error)
+    console.log("Hello!")
+ });
+
  // get the data
 //  d3v4.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv", function(data) {
 //      console.log(data)
