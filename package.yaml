@@ -2,7 +2,6 @@ name:    MyGitHubVisualization
 version: "0.0.0"
 
 dependencies:
-
 - base >=4.9.1.0 && <5
 - yesod >=1.6 && <1.7
 - yesod-core >=1.6 && <1.7
@@ -38,6 +37,13 @@ dependencies:
 - case-insensitive
 - wai
 - foreign-store
+- aeson-pretty
+- text
+- servant
+- servant-client
+- http-client
+- utf8-string
+- dotenv
 
 # The library contains all of our application code. The executable
 # defined below is just a thin wrapper.
