@@ -1,4 +1,5 @@
-<div id="my_dataviz">
+<div id="histogram_div">
+<div id="barchart_div">
 <button class="randomize"> randomize
 <div id="piechart">
 
