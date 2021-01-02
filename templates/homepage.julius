@@ -6,7 +6,7 @@
      hist_height = 400 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
-var svg = d3v4.select("#my_dataviz")
+var hist_svg = d3v4.select("#my_dataviz")
    .append("svg")
      .attr("width", hist_width + margin.left + margin.right)
      .attr("height", hist_height + margin.top + margin.bottom)
@@ -14,14 +14,16 @@ var svg = d3v4.select("#my_dataviz")
      .attr("transform",
            "translate(" + margin.left + "," + margin.top + ")");
 
- // get the data
- d3v4.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv", function(data) {
+    var data = [{price:10}, {price:10}, {price:20}, {price:20}, {price:20}, {price:30}, {price:23}, {price:40}, {price:40}, {price:40}]
 
+ // get the data
+//  d3v4.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv", function(data) {
+//      console.log(data)
    // X axis: scale and draw:
    var x = d3v4.scaleLinear()
-       .domain([0, 1000])     // can use this instead of 1000 to have the max of data: d3v4.max(data, function(d) { return +d.price })
+       .domain([0, d3v4.max(data, function(d) { return (+d.price)+10 })])     // can use this instead of 1000 to have the max of data: )
        .range([0, hist_width]);
-   svg.append("g")
+   hist_svg.append("g")
        .attr("transform", "translate(0," + hist_height + ")")
        .call(d3v4.axisBottom(x));
 
@@ -38,11 +40,11 @@ var svg = d3v4.select("#my_dataviz")
    var y = d3v4.scaleLinear()
        .range([hist_height, 0]);
        y.domain([0, d3v4.max(bins, function(d) { return d.length; })]);   // d3v4.hist has to be called before the Y axis obviously
-   svg.append("g")
+   hist_svg.append("g")
        .call(d3v4.axisLeft(y));
 
-//   // append the bar rectangles to the svg element
-   svg.selectAll("rect")
+//   // append the bar rectangles to the hist_svg element
+   hist_svg.selectAll("rect")
        .data(bins)
        .enter()
        .append("rect")
@@ -52,7 +54,7 @@ var svg = d3v4.select("#my_dataviz")
          .attr("height", function(d) { return hist_height - y(d.length); })
          .style("fill", "#69b3a2")
 
- });
+// });
 
 // PIE CHART - FROM http://bl.ocks.org/dbuezas/9306799
 
