@@ -5,6 +5,7 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE LambdaCase #-} -- needed for \case
 
 module Handler.Home where
 
@@ -14,6 +15,18 @@ import Text.Julius (RawJS (..))
 import GHC.Generics ( Generic )
 import Data.Aeson
 import MyGitHubAPI
+
+-- Imports required for Servant calls
+import qualified Servant.Client as SClient
+import Servant.API ( BasicAuthData(BasicAuthData) )
+import System.Environment ( getEnv )
+import Data.Text as DT ( Text, unpack )
+import Data.List as DL ( map )
+import Data.Either
+import qualified Data.ByteString.UTF8 as U8 (fromString)
+import Configuration.Dotenv as Dotenv (loadFile, defaultConfig)
+import Control.Monad
+
 import System.Random (randomRIO)
 -- Define our data that will be used for creating the form.
 data FileForm = FileForm
@@ -72,18 +85,47 @@ sampleForm = renderBootstrap3 BootstrapBasicForm $ FileForm
 commentIds :: (Text, Text, Text)
 commentIds = ("js-commentForm", "js-createCommentTextarea", "js-commentList")
 
-data User = User { name :: String
-                 , commits :: Int
-                 } deriving (Generic, ToJSON)
+-- data User = User { name :: String
+--                  , commits :: Int
+--                  } deriving (Generic, ToJSON)
+
+-- getUserDatamR :: Handler Value
+-- getUserDatamR = do
+--   lst <- liftIO $ randomList ["Bill", "Ben","John", "Jane", "Tim", "Sam"]
+--   return $ toJSON lst
+
+-- randomList :: [String] -> IO [User]
+-- randomList [] = return []
+-- randomList (x:xs) = do
+--   r  <- randomRIO (10,40)
+--   rs <- randomList xs
+--   return (User x r:rs)
+
+headerUserAgent :: Maybe GHHeaderUserAgent
+headerUserAgent = Just "user-agent"
+
+headerAccept :: Maybe GHHeaderAccept
+headerAccept = Just "application/vnd.github.v3+json"  -- explicitly stating that we are using API v3, as specified in the GitHub documentation
+
+getAuthToken :: IO BasicAuthData
+getAuthToken = do
+    loadFile defaultConfig
+    tokenUser <- getEnv "GITHUBUSER"
+    tokenString <- getEnv "GITHUBTOKEN"
+    let authToken = BasicAuthData (U8.fromString tokenUser) (U8.fromString tokenString)  -- Creating authentication token to pass
+    return authToken
+
+dud :: GHUserData
+dud = GHUserData Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing 
 
 getUserDataR :: Handler Value
 getUserDataR = do
-  lst <- liftIO $ randomList ["Bill", "Ben","John", "Jane", "Tim", "Sam"]
-  return $ toJSON lst
+    authToken <- liftIO getAuthToken             -- separated into its own function 
+    let ghUserName = "tonga6"
+    responce <- liftIO $ SClient.runClientM (MyGitHubAPI.getGHUserName headerUserAgent headerAccept authToken ghUserName) =<< MyGitHubAPI.env
+    return $ toJSON $ fromRight dud responce
 
-randomList :: [String] -> IO [User]
-randomList [] = return []
-randomList (x:xs) = do
-  r  <- randomRIO (10,40)
-  rs <- randomList xs
-  return (User x r:rs)
+-- getGHUserDataR :: Handler Value
+
+
+
