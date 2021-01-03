@@ -16,13 +16,6 @@ var hist_svg = d3v4.select("#histogram_div")
 
     var data = [{price:10}, {price:10}, {price:20}, {price:20}, {price:20}, {price:30}, {price:23}, {price:40}, {price:40}, {price:40}]
 
- d3v4.json("/userdata/torvalds", function (error,data) {
-    console.log("Hello!")
-    console.log(data)
-    console.log(error)
-    console.log("Hello!")
- });
-
  // get the data
 //  d3v4.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv", function(data) {
 //      console.log(data)
@@ -262,3 +255,44 @@ d3v4.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_da
       .attr("fill", "#69b3a2")
 
 })
+
+$(function() {
+  $("##{rawJS commentFormId}").submit(function(event) {
+    event.preventDefault();
+
+    var message = $("##{rawJS commentTextareaId}").val();
+    // (Browsers that enforce the "required" attribute on the textarea won't see this alert)
+    if (!message) {
+      alert("Please fill out the comment form first.");
+      return;
+    }
+
+	var call = "/userdata/".concat(message)
+	d3v4.json(call, function (error,data) {
+    console.log("Hello!")
+    console.log(data)
+    console.log(error)
+    console.log("Hello!")
+ 	});
+
+    // // Make an AJAX request to the server to create a new comment
+    // $.ajax({
+    //     url: '@{CommentR}',
+    //     type: 'POST',
+    //     contentType: "application/json",
+    //     data: JSON.stringify({
+    //       message: message,
+    //     }),
+    //     success: function (data) {
+    //       var newNode = $("<li></li>");
+    //       newNode.text(data.message);
+    //       console.log(data);
+    //       $("##{rawJS commentListId}").append(newNode);
+    //     },
+    //     error: function (data) {
+    //       console.log("Error creating comment: " + data);
+    //     },
+    //   });
+
+  });
+});
