@@ -20,7 +20,7 @@ import MyGitHubAPI
 import qualified Servant.Client as SClient
 import Servant.API ( BasicAuthData(BasicAuthData) )
 import System.Environment ( getEnv )
-import Data.Text as DT ( Text, unpack )
+import Data.Text as DT
 import Data.List as DL ( map )
 import Data.Either
 import qualified Data.ByteString.UTF8 as U8 (fromString)
@@ -118,12 +118,24 @@ getAuthToken = do
 dud :: GHUserData
 dud = GHUserData Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing 
 
-getUserDataR :: Handler Value
-getUserDataR = do
+getUserDataR :: Text -> Handler Value
+getUserDataR ghUserName = do
     authToken <- liftIO getAuthToken             -- separated into its own function 
-    let ghUserName = "tonga6"
     responce <- liftIO $ SClient.runClientM (MyGitHubAPI.getGHUserName headerUserAgent headerAccept authToken ghUserName) =<< MyGitHubAPI.env
     return $ toJSON $ fromRight dud responce
+    
+
+-- newtype Natural = Natural Int
+--     deriving (Eq, Show, Read)
+
+-- instance PathPiece Natural where
+--     toPathPiece (Natural i) = DT.pack $ show i
+--     fromPathPiece s =
+--         case reads $ DT.unpack s of
+--             (i, ""):_
+--                 | i < 1 -> Nothing
+--                 | otherwise -> Just $ Natural i
+--             [] -> Nothing
 
 -- getGHUserDataR :: Handler Value
 

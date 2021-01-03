@@ -10,4 +10,4 @@
 
 /comments CommentR POST
 
-/userdata UserDataR GET
+/userdata/#Text UserDataR GET
