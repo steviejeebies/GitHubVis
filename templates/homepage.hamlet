@@ -6,10 +6,8 @@
 <div id="barchart_container">
     <div id="barchart_div">
 <button class="randomize"> randomize
-<div id="piechart">
-
-
-
+<div id="piechart_container">
+    <div id="piechart_div">
 
 $# <div .masthead>
 $#     <div .container>

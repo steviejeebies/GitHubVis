@@ -1,5 +1,5 @@
 function drawPieChart(dataJSON) {
-	var svgPie = d3v3.select("#piechart")
+	var svgPie = d3v3.select("#piechart_div")
 		.append("svg")
 		.append("g")
 

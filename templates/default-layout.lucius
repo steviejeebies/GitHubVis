@@ -76,23 +76,23 @@
 
 /* from http://bl.ocks.org/dbuezas/9306799 */
 
-#piechart {
+#piechart_div {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     width: 960px;
     height: 500px;
     position: relative;
   }
   
-#piechart svg {
+#piechart_div svg {
       width: 100%;
       height: 100%;
   }
   
-#piechart path.slice {
+#piechart_div path.slice {
       stroke-width:2px;
   }
   
-#piechart polyline  {
+#piechart_div polyline  {
       opacity: .3;
       stroke: black;
       stroke-width: 2px;
