@@ -3,7 +3,8 @@
         <textarea rows="2" ##{commentTextareaId} placeholder="Input a GitHub Username" required></textarea>
         <button .btn.btn-primary type=submit> Create comment
 <div id="histogram_div">
-<div id="barchart_div">
+<div id="barchart_container">
+    <div id="barchart_div">
 <button class="randomize"> randomize
 <div id="piechart">
 

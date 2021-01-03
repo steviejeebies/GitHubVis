@@ -51,6 +51,10 @@ getHomeR = do
         aDomId <- newIdent
         setTitle "SWENG PROJECT"
         $(widgetFile "homepage")
+        $(widgetFile "charts/barchart")
+        $(widgetFile "charts/histogram")
+        $(widgetFile "charts/piechart")
+        $(widgetFile "userInputFormSubmission")
 
 postHomeR :: Handler Html
 postHomeR = do
