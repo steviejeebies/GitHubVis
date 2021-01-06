@@ -1,3 +1,6 @@
+### GitHub Visualization (Attempt 1)
+This was my attempt at creating a Git Hub visualisation site, using Yesod, Haskell and Servant (carrying over my code from part one of this project for the API access). I abadoned this when it became clear that developing the API with Haskell and applying it to a Yesod site would be too restrictive and time consuming for what I wanted to do with it, and switching to creating a HTML/Javascript site from scratch with my remaining time would end up with better results. [The Javascript repo can be found here](https://github.com/steviejeebies/GitHubVisualisation)
+
 ## Haskell Setup
 
 1. If you haven't already, [install Stack](https://haskell-lang.org/get-started)
